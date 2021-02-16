@@ -1,4 +1,4 @@
-﻿// System.Random
+﻿// Random
 using System;
 using System.Runtime.InteropServices;
 
