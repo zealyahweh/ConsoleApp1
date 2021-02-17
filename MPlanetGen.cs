@@ -350,20 +350,21 @@ public class MPlanetGen
         ThemeProtoSet themes = ThemeWorks.GetThemes();
         var themeProto1 = themes.dataArray[planet.theme - 1];
 
-        //if (set_algo > 0)
-        //{
-        //    planet.algoId = set_algo;
-        //}
-        //else
-        //{
-        //    planet.algoId = 0;
-        //    if (themeProto1 != null && themeProto1.Algos != null && themeProto1.Algos.Length > 0)
-        //    {
-        //        planet.algoId = themeProto1.Algos[(int)(rand2 * (double)themeProto1.Algos.Length) % themeProto1.Algos.Length];
-        //        planet.mod_x = (double)themeProto1.ModX.x + rand3 * ((double)themeProto1.ModX.y - (double)themeProto1.ModX.x);
-        //        planet.mod_y = (double)themeProto1.ModY.x + rand4 * ((double)themeProto1.ModY.y - (double)themeProto1.ModY.x);
-        //    }
-        //}
+        if (set_algo > 0)
+        {
+            planet.algoId = set_algo;
+        }
+        else
+        {
+            planet.algoId = 0;
+            if (themeProto1 != null && themeProto1.Algos != null && 1 > 0)
+            {
+                planet.algoId = themeProto1.Algos.@int;
+                //planet.algoId = themeProto1.Algos[(int)(rand2 * (double)themeProto1.Algos.Length) % themeProto1.Algos.Length];
+                planet.mod_x = (double)themeProto1.ModX.x + rand3 * ((double)themeProto1.ModX.y - (double)themeProto1.ModX.x);
+                planet.mod_y = (double)themeProto1.ModY.x + rand4 * ((double)themeProto1.ModY.y - (double)themeProto1.ModY.x);
+            }
+        }
         if (themeProto1 == null)
             return;
         planet.type = themeProto1.PlanetType;

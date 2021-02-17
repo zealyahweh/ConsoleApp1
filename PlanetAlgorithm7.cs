@@ -1,61 +1,37 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: PlanetAlgorithm
-// Assembly: Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 22C4C399-B83F-4A90-970F-58ADEF11038D
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Dyson Sphere Program\DSPGAME_Data\Managed\Assembly-CSharp.dll
-
+﻿
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PlanetAlgorithm
+public class PlanetAlgorithm7 : PlanetAlgorithm
 {
-    protected int seed;
-    protected PlanetData planet;
     private Vector3[] veinVectors = new Vector3[512];
     private EVeinType[] veinVectorTypes = new EVeinType[512];
     //private int veinVectorCount;
     private List<Vector2> tmp_vecs = new List<Vector2>(100);
 
-    public void Reset(int _seed, PlanetData _planet)
+    public override void GenerateVeins(bool sketchOnly)
     {
-        this.seed = _seed;
-        this.planet = _planet;
-    }
-
-    //public abstract void GenerateTerrain(double modX, double modY);
-
-    //public abstract void GenerateVegetables();
-
-    //public virtual void CalcWaterPercent()
-    //{
-    //    if (this.planet.type == EPlanetType.Gas)
-    //        this.planet.windStrength = 0.0f;
-    //    PlanetAlgorithm.CalcLandPercent(this.planet);
-    //}
-
-    public virtual void GenerateVeins(bool sketchOnly)
-    {
-        //lock ((object)this.planet)
-        //{
+        lock ((object)this.planet)
+        {
             ThemeProtoSet themes = ThemeWorks.GetThemes();
             var themeProto = themes.dataArray[this.planet.theme - 1];
             if (themeProto == null)
                 return;
-            Random random1 = new Random(this.planet.seed);
+            System.Random random1 = new System.Random(this.planet.seed);
             random1.Next();
             random1.Next();
             random1.Next();
             random1.Next();
-            int _birthSeed = random1.Next();
-            Random random2 = new Random(random1.Next());
+            random1.Next();
+            System.Random random2 = new System.Random(random1.Next());
             //PlanetRawData data = this.planet.data;
             float num1 = 2.1f / this.planet.radius;
-            int VeinCount = 15;
             //VeinProto[] veinProtos = PlanetModelingManager.veinProtos;
             //int[] veinModelIndexs = PlanetModelingManager.veinModelIndexs;
             //int[] veinModelCounts = PlanetModelingManager.veinModelCounts;
             //int[] veinProducts = PlanetModelingManager.veinProducts;
+            int VeinCount = 15;
             int[] numArray1 = new int[VeinCount];
             float[] numArray2 = new float[VeinCount];
             float[] numArray3 = new float[VeinCount];
@@ -154,51 +130,34 @@ public abstract class PlanetAlgorithm
                         ++numArray1[rareVein];
                 }
             }
-            bool flag1 = this.planet.galaxy.birthPlanetId == this.planet.id;
-            //if (flag1 && !sketchOnly)
-            //    this.planet.GenBirthPoints(data, _birthSeed);
             float resourceCoef = this.planet.star.resourceCoef;
-
-            //
-            //bool flag2 = (double)DSPGame.GameDesc.resourceMultiplier >= 99.5;
-            if (flag1)
-                resourceCoef *= 0.6666667f;
+            //bool flag1 = (double)DSPGame.GameDesc.resourceMultiplier >= 99.5;
+            //if (this.planet.galaxy.birthPlanetId == this.planet.id)
+            //    resourceCoef *= 0.6666667f;
             //float num7 = 1f * 1.1f;
             Array.Clear((Array)this.veinVectors, 0, this.veinVectors.Length);
             Array.Clear((Array)this.veinVectorTypes, 0, this.veinVectorTypes.Length);
             //this.veinVectorCount = 0;
-            Vector3 vector3_1;
-            if (flag1)
-            {
-                vector3_1 = this.planet.birthPoint;
-                vector3_1.Normalize();
-                vector3_1 *= 0.75f;
-            }
-            else
-            {
-                Vector3 vector3_2;
-                vector3_2.x = (float)(random2.NextDouble() * 2.0 - 1.0);
-                vector3_2.y = (float)random2.NextDouble() - 0.5f;
-                vector3_2.z = (float)(random2.NextDouble() * 2.0 - 1.0);
-                vector3_2.Normalize();
-                vector3_1 = vector3_2 * (float)(random2.NextDouble() * 0.4 + 0.2);
-            }
+            //Vector3 vector3_1;
+            //if (this.planet.galaxy.birthPlanetId == this.planet.id)
+            //{
+            //    Pose pose = this.planet.PredictPose(120.0);
+            //    Vector3 vector3_2 = (Vector3)Maths.QInvRotateLF(pose.rotation, this.planet.star.uPosition - (VectorLF3)pose.position * 40000.0);
+            //    vector3_2.Normalize();
+            //    vector3_1 = vector3_2 * 0.75f;
+            //}
+            //else
+            //{
+            //    Vector3 vector3_2;
+            //    vector3_2.x = (float)(random2.NextDouble() * 2.0 - 1.0);
+            //    vector3_2.y = (float)random2.NextDouble() - 0.5f;
+            //    vector3_2.z = (float)(random2.NextDouble() * 2.0 - 1.0);
+            //    vector3_2.Normalize();
+            //    vector3_1 = vector3_2 * (float)(random2.NextDouble() * 0.4 + 0.2);
+            //}
             this.planet.veinSpotsSketch = numArray1;
             if (sketchOnly)
                 return;
-            
-
-
-
-
-            //if (flag1)
-            //{
-            //    this.veinVectorTypes[0] = EVeinType.Iron;
-            //    this.veinVectors[0] = this.planet.birthResourcePoint0;
-            //    this.veinVectorTypes[1] = EVeinType.Copper;
-            //    this.veinVectors[1] = this.planet.birthResourcePoint1;
-            //    this.veinVectorCount = 2;
-            //}
             //for (int index1 = 1; index1 < 15 && this.veinVectorCount < this.veinVectors.Length; ++index1)
             //{
             //    EVeinType eveinType = (EVeinType)index1;
@@ -209,7 +168,7 @@ public abstract class PlanetAlgorithm
             //    {
             //        int num3 = 0;
             //        Vector3 zero = Vector3.zero;
-            //        bool flag3 = false;
+            //        bool flag2 = false;
             //        while (num3++ < 200)
             //        {
             //            zero.x = (float)(random2.NextDouble() * 2.0 - 1.0);
@@ -218,27 +177,26 @@ public abstract class PlanetAlgorithm
             //            if (eveinType != EVeinType.Oil)
             //                zero += vector3_1;
             //            zero.Normalize();
-            //            float num4 = data.QueryHeight(zero);
-            //            if ((double)num4 >= (double)this.planet.radius && (eveinType != EVeinType.Oil || (double)num4 >= (double)this.planet.radius + 0.5))
+            //            if (eveinType != EVeinType.Bamboo || (double)data.QueryHeight(zero) <= (double)this.planet.realRadius - 4.0)
             //            {
-            //                bool flag4 = false;
-            //                float num5 = eveinType != EVeinType.Oil ? 196f : 100f;
+            //                bool flag3 = false;
+            //                float num4 = eveinType != EVeinType.Oil ? 196f : 100f;
             //                for (int index3 = 0; index3 < this.veinVectorCount; ++index3)
             //                {
-            //                    if ((double)(this.veinVectors[index3] - zero).sqrMagnitude < (double)num1 * (double)num1 * (double)num5)
+            //                    if ((double)(this.veinVectors[index3] - zero).sqrMagnitude < (double)num1 * (double)num1 * (double)num4)
             //                    {
-            //                        flag4 = true;
+            //                        flag3 = true;
             //                        break;
             //                    }
             //                }
-            //                if (!flag4)
+            //                if (!flag3)
             //                {
-            //                    flag3 = true;
+            //                    flag2 = true;
             //                    break;
             //                }
             //            }
             //        }
-            //        if (flag3)
+            //        if (flag2)
             //        {
             //            this.veinVectors[this.veinVectorCount] = zero;
             //            this.veinVectorTypes[this.veinVectorCount] = eveinType;
@@ -270,47 +228,41 @@ public abstract class PlanetAlgorithm
             //    int num2 = Mathf.RoundToInt(numArray2[index2] * (float)random2.Next(20, 25));
             //    if (veinVectorType == EVeinType.Oil)
             //        num2 = 1;
-            //    float num3 = numArray3[index2];
-            //    if (flag1 && index1 < 2)
-            //    {
-            //        num2 = 6;
-            //        num3 = 0.2f;
-            //    }
-            //    int num4 = 0;
-            //    while (num4++ < 20)
+            //    int num3 = 0;
+            //    while (num3++ < 20)
             //    {
             //        int count = this.tmp_vecs.Count;
             //        for (int index3 = 0; index3 < count && this.tmp_vecs.Count < num2; ++index3)
             //        {
             //            if ((double)this.tmp_vecs[index3].sqrMagnitude <= 36.0)
             //            {
-            //                double num5 = random2.NextDouble() * Math.PI * 2.0;
-            //                Vector2 vector2_1 = new Vector2((float)Math.Cos(num5), (float)Math.Sin(num5));
+            //                double num4 = random2.NextDouble() * Math.PI * 2.0;
+            //                Vector2 vector2_1 = new Vector2((float)Math.Cos(num4), (float)Math.Sin(num4));
             //                vector2_1 += this.tmp_vecs[index3] * 0.2f;
             //                vector2_1.Normalize();
             //                Vector2 vector2_2 = this.tmp_vecs[index3] + vector2_1;
-            //                bool flag3 = false;
+            //                bool flag2 = false;
             //                for (int index4 = 0; index4 < this.tmp_vecs.Count; ++index4)
             //                {
             //                    if ((double)(this.tmp_vecs[index4] - vector2_2).sqrMagnitude < 0.850000023841858)
             //                    {
-            //                        flag3 = true;
+            //                        flag2 = true;
             //                        break;
             //                    }
             //                }
-            //                if (!flag3)
+            //                if (!flag2)
             //                    this.tmp_vecs.Add(vector2_2);
             //            }
             //        }
             //        if (this.tmp_vecs.Count >= num2)
             //            break;
             //    }
-            //    int num6 = Mathf.RoundToInt(num3 * 100000f * resourceCoef);
-            //    if (num6 < 20)
-            //        num6 = 20;
-            //    int num8 = num6 >= 16000 ? 15000 : Mathf.FloorToInt((float)num6 * (15f / 16f));
-            //    int minValue = num6 - num8;
-            //    int maxValue = num6 + num8 + 1;
+            //    int num5 = Mathf.RoundToInt(numArray3[index2] * 100000f * resourceCoef);
+            //    if (num5 < 20)
+            //        num5 = 20;
+            //    int num6 = num5 >= 16000 ? 15000 : Mathf.FloorToInt((float)num5 * (15f / 16f));
+            //    int minValue = num5 - num6;
+            //    int maxValue = num5 + num6 + 1;
             //    for (int index3 = 0; index3 < this.tmp_vecs.Count; ++index3)
             //    {
             //        Vector3 vector3_4 = (this.tmp_vecs[index3].x * vector3_2 + this.tmp_vecs[index3].y * vector3_3) * num1;
@@ -322,63 +274,25 @@ public abstract class PlanetAlgorithm
             //            vein.amount = Mathf.RoundToInt((float)vein.amount * DSPGame.GameDesc.resourceMultiplier);
             //        if (vein.amount < 1)
             //            vein.amount = 1;
-            //        if (flag2 && vein.type != EVeinType.Oil)
+            //        if (flag1 && vein.type != EVeinType.Oil)
             //            vein.amount = 1000000000;
             //        vein.productId = veinProducts[index2];
             //        vein.pos = normalized + vector3_4;
             //        if (vein.type == EVeinType.Oil)
             //            vein.pos = this.planet.aux.RawSnap(vein.pos);
             //        vein.minerCount = 0;
-            //        float num5 = data.QueryHeight(vein.pos);
+            //        float num4 = data.QueryHeight(vein.pos);
             //        data.EraseVegetableAtPoint(vein.pos);
-            //        vein.pos = vein.pos.normalized * num5;
-            //        if (this.planet.waterItemId == 0 || (double)num5 >= (double)this.planet.radius)
-            //        {
-            //            this.planet.veinAmounts[(int)veinVectorType] += (long)vein.amount;
-            //            ++this.planet.veinGroups[index1].count;
-            //            this.planet.veinGroups[index1].amount += (long)vein.amount;
-            //            data.AddVeinData(vein);
-            //        }
+            //        vein.pos = vein.pos.normalized * num4;
+            //        this.planet.veinAmounts[(int)veinVectorType] += (long)vein.amount;
+            //        ++this.planet.veinGroups[index1].count;
+            //        this.planet.veinGroups[index1].amount += (long)vein.amount;
+            //        data.AddVeinData(vein);
             //    }
             //}
             this.tmp_vecs.Clear();
-        //}
+        }
     }
 
-    //public static void CalcLandPercent(PlanetData _planet)
-    //{
-    //    PlanetRawData data = _planet.data;
-    //    int stride = data.stride;
-    //    int num1 = stride / 2;
-    //    int dataLength = data.dataLength;
-    //    ushort[] heightData = data.heightData;
-    //    float num2 = (float)((double)_planet.radius * 100.0 - 20.0);
-    //    if (_planet.type == EPlanetType.Gas)
-    //    {
-    //        _planet.landPercent = 0.0f;
-    //    }
-    //    else
-    //    {
-    //        int num3 = 0;
-    //        int num4 = 0;
-    //        for (int index = 0; index < dataLength; ++index)
-    //        {
-    //            int num5 = index % stride;
-    //            int num6 = index / stride;
-    //            if (num5 > num1)
-    //                --num5;
-    //            if (num6 > num1)
-    //                --num6;
-    //            if ((num5 & 1) == 1 && (num6 & 1) == 1)
-    //            {
-    //                if ((double)heightData[index] >= (double)num2)
-    //                    ++num4;
-    //                else if (data.GetModLevel(index) == 3)
-    //                    ++num4;
-    //                ++num3;
-    //            }
-    //        }
-    //        _planet.landPercent = num3 <= 0 ? 0.0f : (float)num4 / (float)num3;
-    //    }
-    //}
+    private static float diff(float a, float b) => (double)a > (double)b ? a - b : b - a;
 }

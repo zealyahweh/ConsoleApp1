@@ -105,12 +105,12 @@ public class MUniverseGen
             }
         }
         //Assert.Positive(galaxy.birthPlanetId);
-        //for (int index1 = 0; index1 < tempPoses; ++index1)
-        //{
-        //    StarData star = galaxy.stars[index1];
-        //    for (int index2 = 0; index2 < star.planetCount; ++index2)
-        //        PlanetModelingManager.Algorithm(star.planets[index2]).GenerateVeins(true);
-        //}
+        for (int index1 = 0; index1 < tempPoses; ++index1)
+        {
+            StarData star = galaxy.stars[index1];
+            for (int index2 = 0; index2 < star.planetCount; ++index2)
+                PlanetModelingManager.Algorithm(star.planets[index2]).GenerateVeins(true);
+        }
         //MUniverseGen.CreateGalaxyStarGraph(galaxy);
         return galaxy;
     }

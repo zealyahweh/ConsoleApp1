@@ -56,7 +56,17 @@
     <Compile Include="MStarGen.cs" />
     <Compile Include="MUniverseGen.cs" />
     <Compile Include="NameGen.cs" />
+    <Compile Include="PlanetAlgorithm.cs" />
+    <Compile Include="PlanetAlgorithm0.cs" />
+    <Compile Include="PlanetAlgorithm1.cs" />
+    <Compile Include="PlanetAlgorithm2.cs" />
+    <Compile Include="PlanetAlgorithm3.cs" />
+    <Compile Include="PlanetAlgorithm4.cs" />
+    <Compile Include="PlanetAlgorithm5.cs" />
+    <Compile Include="PlanetAlgorithm6.cs" />
+    <Compile Include="PlanetAlgorithm7.cs" />
     <Compile Include="PlanetData.cs" />
+    <Compile Include="PlanetModelingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="StarData.cs" />

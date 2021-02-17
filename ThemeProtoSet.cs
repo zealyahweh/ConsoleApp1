@@ -209,15 +209,15 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     private @int[] vegetables5Field;
 
-    private @int[] veinSpotField;
+    private int[] veinSpotField;
 
-    private @float[] veinCountField;
+    private float[] veinCountField;
 
-    private @float[] veinOpacityField;
+    private float[] veinOpacityField;
 
-    private @int[] rareVeinsField;
+    private int[] rareVeinsField;
 
-    private @float[] rareSettingsField;
+    private float[] rareSettingsField;
 
     private int[] gasItemsField;
 
@@ -611,8 +611,8 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("int", typeof(@int))]
-    public @int[] VeinSpot
+
+    public int[] VeinSpot
     {
         get
         {
@@ -626,8 +626,8 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("float", typeof(@float))]
-    public @float[] VeinCount
+
+    public float[] VeinCount
     {
         get
         {
@@ -641,8 +641,8 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("float", typeof(@float))]
-    public @float[] VeinOpacity
+
+    public float[] VeinOpacity
     {
         get
         {
@@ -656,8 +656,8 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("int", typeof(@int))]
-    public @int[] RareVeins
+    //[System.Xml.Serialization.XmlArrayItemAttribute("int", typeof(@int))]
+    public int[] RareVeins
     {
         get
         {
@@ -671,8 +671,8 @@ public partial class ThemeProtoSetDataArrayThemeProto
 
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("float", typeof(@float))]
-    public @float[] RareSettings
+    //[System.Xml.Serialization.XmlArrayItemAttribute("float", typeof(@float))]
+    public float[] RareSettings
     {
         get
         {
@@ -739,11 +739,11 @@ public partial class ThemeProtoSetDataArrayThemeProto
 public partial class ThemeProtoSetDataArrayThemeProtoAlgos
 {
 
-    private string intField;
+    private int intField;
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public string @int
+    public int @int
     {
         get
         {
