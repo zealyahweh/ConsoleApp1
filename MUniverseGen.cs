@@ -86,7 +86,7 @@ public static class MUniverseGen
             for (int index = 0; index < starData.planetCount; ++index)
             {
                 PlanetData planet = starData.planets[index];
-                ThemeProtoSet themes = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+                ThemeProtoSet themes = ThemeWorks.GetThemes();
                 var themeProto = themes.dataArray[planet.theme - 1];
                 if (themeProto != null && themeProto.Distribute == EThemeDistribute.Birth)
                 {

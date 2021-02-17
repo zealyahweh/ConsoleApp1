@@ -258,7 +258,7 @@ public static class MPlanetGen
             int length = themeIds.Length;
             for (int index1 = 0; index1 < length; ++index1)
             {
-                ThemeProtoSet themes1 = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+                ThemeProtoSet themes1 = ThemeWorks.GetThemes();
                 var themeProto = themes1.dataArray[index1];
                 bool flag = false;
                 if (planet.star.index == 0 && planet.type == EPlanetType.Ocean)
@@ -294,7 +294,7 @@ public static class MPlanetGen
             {
                 for (int index1 = 0; index1 < length; ++index1)
                 {
-                    ThemeProtoSet themes1 = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+                    ThemeProtoSet themes1 = ThemeWorks.GetThemes();
                     var themeProto = themes1.dataArray[index1];
                     bool flag = false;
                     if (themeProto.PlanetType == EPlanetType.Desert)
@@ -318,7 +318,7 @@ public static class MPlanetGen
             {
                 for (int index = 0; index < length; ++index)
                 {
-                    ThemeProtoSet themes1 = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+                    ThemeProtoSet themes1 = ThemeWorks.GetThemes();
                     var themeProto = themes1.dataArray[index];
                     if (themeProto.PlanetType == EPlanetType.Desert)
                         MPlanetGen.tmp_theme.Add(themeProto.ID);
@@ -327,7 +327,7 @@ public static class MPlanetGen
             planet.theme = MPlanetGen.tmp_theme[(int)(rand1 * (double)MPlanetGen.tmp_theme.Count) % MPlanetGen.tmp_theme.Count];
         }
 
-        ThemeProtoSet themes = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+        ThemeProtoSet themes = ThemeWorks.GetThemes();
         var themeProto1 = themes.dataArray[planet.theme - 1];
 
         //if (set_algo > 0)

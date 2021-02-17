@@ -61,19 +61,19 @@ public class PlanetData
     public int segment = 5;
     //public PlanetRawData data;
     public const int kMaxMeshCnt = 100;
-    public GameObject gameObject;
-    public GameObject bodyObject;
-    public Material terrainMaterial;
-    public Material oceanMaterial;
-    public Material atmosMaterial;
-    public Material minimapMaterial;
-    public Material reformMaterial;
-    public RenderTexture heightmap;
+    //public GameObject gameObject;
+    //public GameObject bodyObject;
+    //public Material terrainMaterial;
+    //public Material oceanMaterial;
+    //public Material atmosMaterial;
+    //public Material minimapMaterial;
+    //public Material reformMaterial;
+    //public RenderTexture heightmap;
     //public AmbientDesc ambientDesc;
     //public AudioClip ambientSfx;
     public float ambientSfxVolume;
-    public Mesh[] meshes = new Mesh[100];
-    public MeshRenderer[] meshRenderers = new MeshRenderer[100];
+    //public Mesh[] meshes = new Mesh[100];
+    //public MeshRenderer[] meshRenderers = new MeshRenderer[100];
     //public MeshCollider[] meshColliders = new MeshCollider[100];
     public bool[] dirtyFlags = new bool[100];
     public bool landPercentDirty;
@@ -108,16 +108,16 @@ public class PlanetData
 
     public float realRadius => this.radius * this.scale;
 
-    public event Action<PlanetData> onLoaded;
-
-    public event Action<PlanetData> onFactoryLoaded;
+    //public event Action<PlanetData> onLoaded;
+    //
+    //public event Action<PlanetData> onFactoryLoaded;
 
     public string typeString
     {
         get
         {
             string str = "未知";
-            ThemeProtoSet themes = DSPSeedFilter.DSPSeedFilter.PublicTheme();
+            ThemeProtoSet themes = ThemeWorks.GetThemes();
             var themeProto = themes.dataArray[this.theme - 1];
             if (themeProto != null)
                 str = themeProto.DisplayName;
@@ -148,25 +148,25 @@ public class PlanetData
         }
     }
 
-    public void NotifyLoaded()
-    {
-        this.loaded = true;
-        this.loading = false;
-        this.wanted = true;
-        if (this.onLoaded == null)
-            return;
-        this.onLoaded(this);
-    }
-
-    public void NotifyFactoryLoaded()
-    {
-        this.factoryLoaded = true;
-        this.factoryLoading = false;
-        this.wanted = true;
-        if (this.onFactoryLoaded == null)
-            return;
-        this.onFactoryLoaded(this);
-    }
+    //public void NotifyLoaded()
+    //{
+    //    this.loaded = true;
+    //    this.loading = false;
+    //    this.wanted = true;
+    //    if (this.onLoaded == null)
+    //        return;
+    //    this.onLoaded(this);
+    //}
+    //
+    //public void NotifyFactoryLoaded()
+    //{
+    //    this.factoryLoaded = true;
+    //    this.factoryLoading = false;
+    //    this.wanted = true;
+    //    if (this.onFactoryLoaded == null)
+    //        return;
+    //    this.onFactoryLoaded(this);
+    //}
 
     //private void UnloadData()
     //{
@@ -176,52 +176,52 @@ public class PlanetData
     //    this.data = (PlanetRawData)null;
     //}
 
-    private void UnloadMeshes()
-    {
-        for (int index = 0; index < this.meshes.Length; ++index)
-        {
-            if ((UnityEngine.Object)this.meshes[index] != (UnityEngine.Object)null)
-            {
-                UnityEngine.Object.Destroy((UnityEngine.Object)this.meshes[index]);
-                this.meshes[index] = (Mesh)null;
-            }
-        }
-        if ((UnityEngine.Object)this.gameObject != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.gameObject);
-            this.gameObject = (GameObject)null;
-        }
-        if ((UnityEngine.Object)this.terrainMaterial != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.terrainMaterial);
-            this.terrainMaterial = (Material)null;
-        }
-        if ((UnityEngine.Object)this.oceanMaterial != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.oceanMaterial);
-            this.oceanMaterial = (Material)null;
-        }
-        if ((UnityEngine.Object)this.atmosMaterial != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.atmosMaterial);
-            this.atmosMaterial = (Material)null;
-        }
-        if ((UnityEngine.Object)this.minimapMaterial != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.minimapMaterial);
-            this.minimapMaterial = (Material)null;
-        }
-        if ((UnityEngine.Object)this.reformMaterial != (UnityEngine.Object)null)
-        {
-            UnityEngine.Object.Destroy((UnityEngine.Object)this.reformMaterial);
-            this.reformMaterial = (Material)null;
-        }
-        if (!((UnityEngine.Object)this.heightmap != (UnityEngine.Object)null))
-            return;
-        this.heightmap.Release();
-        UnityEngine.Object.Destroy((UnityEngine.Object)this.heightmap);
-        this.heightmap = (RenderTexture)null;
-    }
+    //private void UnloadMeshes()
+    //{
+    //    for (int index = 0; index < this.meshes.Length; ++index)
+    //    {
+    //        if ((UnityEngine.Object)this.meshes[index] != (UnityEngine.Object)null)
+    //        {
+    //            UnityEngine.Object.Destroy((UnityEngine.Object)this.meshes[index]);
+    //            this.meshes[index] = (Mesh)null;
+    //        }
+    //    }
+    //    if ((UnityEngine.Object)this.gameObject != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.gameObject);
+    //        this.gameObject = (GameObject)null;
+    //    }
+    //    if ((UnityEngine.Object)this.terrainMaterial != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.terrainMaterial);
+    //        this.terrainMaterial = (Material)null;
+    //    }
+    //    if ((UnityEngine.Object)this.oceanMaterial != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.oceanMaterial);
+    //        this.oceanMaterial = (Material)null;
+    //    }
+    //    if ((UnityEngine.Object)this.atmosMaterial != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.atmosMaterial);
+    //        this.atmosMaterial = (Material)null;
+    //    }
+    //    if ((UnityEngine.Object)this.minimapMaterial != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.minimapMaterial);
+    //        this.minimapMaterial = (Material)null;
+    //    }
+    //    if ((UnityEngine.Object)this.reformMaterial != (UnityEngine.Object)null)
+    //    {
+    //        UnityEngine.Object.Destroy((UnityEngine.Object)this.reformMaterial);
+    //        this.reformMaterial = (Material)null;
+    //    }
+    //    if (!((UnityEngine.Object)this.heightmap != (UnityEngine.Object)null))
+    //        return;
+    //    this.heightmap.Release();
+    //    UnityEngine.Object.Destroy((UnityEngine.Object)this.heightmap);
+    //    this.heightmap = (RenderTexture)null;
+    //}
 
     //public void GenBirthPoints(PlanetRawData rawData, int _birthSeed)
     //{
