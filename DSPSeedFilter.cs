@@ -28,38 +28,41 @@ namespace DSPSeedFilter
             int length = themes.dataArray.Length;
             gameDesc.themeIds = new int[length];
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = 100;
+            options.MaxDegreeOfParallelism = 50;
 
 
-            int StartSeed = 0;
-            int EndSeed = 1000;
+
             for (int index = 0; index < length; ++index)
             {
                 gameDesc.themeIds[index] = themes.dataArray[index].ID;
             }
 
-            //Parallel.For(
-            //    StartSeed, 
-            //    EndSeed + 1, 
-            //    options, 
-            //    (i, loopState) =>
-            //    {
-            //        gameDesc.galaxySeed = i;
-            //        GalaxyData galaxyData = MUniverseGen.CreateGalaxy(gameDesc);
-            //        System.Console.WriteLine("Seed: " + galaxyData.seed.ToString("D8") + " BirthStar: " + galaxyData.stars[0].displayName);
-            //    }
-            //
-            //);
+            int StartSeed = 73295657;
+            int EndSeed = 73295657;
+            Parallel.For(
+                StartSeed, 
+                EndSeed + 1, 
+                options, 
+                (i, loopState) =>
+                {
+                    System.Console.WriteLine("StartLoop " + i.ToString("D8"));
+                    gameDesc.galaxySeed = i;
+                    MUniverseGen MUniverseGen = new MUniverseGen();
+                    GalaxyData galaxyData = MUniverseGen.CreateGalaxy(gameDesc);
+                    System.Console.WriteLine("Seed: " + galaxyData.seed.ToString("D8") + " BirthStar: " + galaxyData.stars[0].displayName);
+                }
+            
+            );
 
-            for (int i = StartSeed; i < EndSeed+1; i++)
-            {
-                gameDesc.galaxySeed = i;
-                GalaxyData galaxyData = MUniverseGen.CreateGalaxy(gameDesc);
-                System.Console.WriteLine("Seed: " + galaxyData.seed.ToString("D8") + " BirthStar: "+galaxyData.stars[0].displayName);
-                //System.Console.WriteLine("START: " + galaxyData.stars[0].displayName);
-                //System.Console.WriteLine("BH: " + galaxyData.stars[63].displayName);
-                //System.Console.WriteLine("BH: " + galaxyData.stars[63].position.magnitude);
-            }
+            //for (int i = StartSeed; i < EndSeed+1; i++)
+            //{
+            //    gameDesc.galaxySeed = i;
+            //    GalaxyData galaxyData = MUniverseGen.CreateGalaxy(gameDesc);
+            //    System.Console.WriteLine("Seed: " + galaxyData.seed.ToString("D8") + " BirthStar: "+galaxyData.stars[0].displayName);
+            //    //System.Console.WriteLine("START: " + galaxyData.stars[0].displayName);
+            //    //System.Console.WriteLine("BH: " + galaxyData.stars[63].displayName);
+            //    //System.Console.WriteLine("BH: " + galaxyData.stars[63].position.magnitude);
+            //}
 
 
 

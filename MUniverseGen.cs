@@ -4,20 +4,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class MUniverseGen
+public class MUniverseGen
 {
-    public static int algoVersion = 20200403;
-    private static List<VectorLF3> tmp_poses;
-    private static List<VectorLF3> tmp_drunk;
-    //private static int[] tmp_state;
+    public int algoVersion = 20200403;
+    private List<VectorLF3> tmp_poses;
+    private List<VectorLF3> tmp_drunk;
+    //private int[] tmp_state;
 
-    public static GalaxyData CreateGalaxy(GameDesc gameDesc)
+    public GalaxyData CreateGalaxy(GameDesc gameDesc)
     {
         int galaxySeed = gameDesc.galaxySeed;
         int starCount = gameDesc.starCount;
+        StarGen StarGen = new StarGen();
 
         Random random = new Random(galaxySeed);
-        int tempPoses = MUniverseGen.GenerateTempPoses(random.Next(), starCount, 4, 2.0, 2.3, 3.5, 0.18);
+        int tempPoses = this.GenerateTempPoses(random.Next(), starCount, 4, 2.0, 2.3, 3.5, 0.18);
         GalaxyData galaxy = new GalaxyData();
         galaxy.seed = galaxySeed;
         galaxy.starCount = tempPoses;
@@ -43,6 +44,7 @@ public static class MUniverseGen
             int seed = random.Next();
             if (index == 0)
             {
+                //生成母星系
                 galaxy.stars[index] = StarGen.CreateBirthStar(galaxy, seed);
             }
             else
@@ -61,16 +63,20 @@ public static class MUniverseGen
                     needtype = EStarType.NeutronStar;
                 else if (index >= num11)
                     needtype = EStarType.WhiteDwarf;
-                galaxy.stars[index] = StarGen.CreateStar(galaxy, MUniverseGen.tmp_poses[index], index + 1, seed, needtype, needSpectr);
+                galaxy.stars[index] = StarGen.CreateStar(galaxy, this.tmp_poses[index], index + 1, seed, needtype, needSpectr);
             }
         }
         //AstroPose[] astroPoses = galaxy.astroPoses;
+
+
         StarData[] stars = galaxy.stars;
         //for (int index = 0; index < galaxy.astroPoses.Length; ++index)
         //{
         //    astroPoses[index].uRot.w = 1f;
         //    astroPoses[index].uRotNext.w = 1f;
         //}
+
+
         for (int index = 0; index < tempPoses; ++index)
         {
             StarGen.CreateStarPlanets(galaxy, stars[index], gameDesc);
@@ -79,6 +85,8 @@ public static class MUniverseGen
             //astroPoses[stars[index].id * 100].uRadius = stars[index].physicsRadius;
         }
         //galaxy.UpdatePoses(0.0);
+
+
         galaxy.birthPlanetId = 0;
         if (tempPoses > 0)
         {
@@ -107,7 +115,7 @@ public static class MUniverseGen
         return galaxy;
     }
 
-    private static int GenerateTempPoses(
+    private int GenerateTempPoses(
       int seed,
       int targetCount,
       int iterCount,
@@ -116,32 +124,32 @@ public static class MUniverseGen
       double maxStepLen,
       double flatten)
     {
-        if (MUniverseGen.tmp_poses == null)
+        if (this.tmp_poses == null)
         {
-            MUniverseGen.tmp_poses = new List<VectorLF3>();
-            MUniverseGen.tmp_drunk = new List<VectorLF3>();
+            this.tmp_poses = new List<VectorLF3>();
+            this.tmp_drunk = new List<VectorLF3>();
         }
         else
         {
-            MUniverseGen.tmp_poses.Clear();
-            MUniverseGen.tmp_drunk.Clear();
+            this.tmp_poses.Clear();
+            this.tmp_drunk.Clear();
         }
         if (iterCount < 1)
             iterCount = 1;
         else if (iterCount > 16)
             iterCount = 16;
-        MUniverseGen.RandomPoses(seed, targetCount * iterCount, minDist, minStepLen, maxStepLen, flatten);
-        for (int index = MUniverseGen.tmp_poses.Count - 1; index >= 0; --index)
+        this.RandomPoses(seed, targetCount * iterCount, minDist, minStepLen, maxStepLen, flatten);
+        for (int index = this.tmp_poses.Count - 1; index >= 0; --index)
         {
             if (index % iterCount != 0)
-                MUniverseGen.tmp_poses.RemoveAt(index);
-            if (MUniverseGen.tmp_poses.Count <= targetCount)
+                this.tmp_poses.RemoveAt(index);
+            if (this.tmp_poses.Count <= targetCount)
                 break;
         }
-        return MUniverseGen.tmp_poses.Count;
+        return this.tmp_poses.Count;
     }
 
-    private static void RandomPoses(
+    private void RandomPoses(
       int seed,
       int maxCount,
       double minDist,
@@ -151,7 +159,7 @@ public static class MUniverseGen
     {
         Random random = new Random(seed);
         double num1 = random.NextDouble();
-        MUniverseGen.tmp_poses.Add(VectorLF3.zero);
+        this.tmp_poses.Add(VectorLF3.zero);
         int num2 = 6;
         int num3 = 8;
         if (num2 < 1)
@@ -174,11 +182,11 @@ public static class MUniverseGen
                     double num10 = Math.Sqrt(d);
                     double num11 = (num9 * (maxStepLen - minStepLen) + minDist) / num10;
                     VectorLF3 pt = new VectorLF3(num6 * num11, num7 * num11, num8 * num11);
-                    if (!MUniverseGen.CheckCollision(MUniverseGen.tmp_poses, pt, minDist))
+                    if (!this.CheckCollision(this.tmp_poses, pt, minDist))
                     {
-                        MUniverseGen.tmp_drunk.Add(pt);
-                        MUniverseGen.tmp_poses.Add(pt);
-                        if (MUniverseGen.tmp_poses.Count >= maxCount)
+                        this.tmp_drunk.Add(pt);
+                        this.tmp_poses.Add(pt);
+                        if (this.tmp_poses.Count >= maxCount)
                             return;
                         break;
                     }
@@ -188,7 +196,7 @@ public static class MUniverseGen
         int num12 = 0;
         while (num12++ < 256)
         {
-            for (int index = 0; index < MUniverseGen.tmp_drunk.Count; ++index)
+            for (int index = 0; index < this.tmp_drunk.Count; ++index)
             {
                 if (random.NextDouble() <= 0.7)
                 {
@@ -204,12 +212,12 @@ public static class MUniverseGen
                         {
                             double num10 = Math.Sqrt(d);
                             double num11 = (num9 * (maxStepLen - minStepLen) + minDist) / num10;
-                            VectorLF3 pt = new VectorLF3(MUniverseGen.tmp_drunk[index].x + num6 * num11, MUniverseGen.tmp_drunk[index].y + num7 * num11, MUniverseGen.tmp_drunk[index].z + num8 * num11);
-                            if (!MUniverseGen.CheckCollision(MUniverseGen.tmp_poses, pt, minDist))
+                            VectorLF3 pt = new VectorLF3(this.tmp_drunk[index].x + num6 * num11, this.tmp_drunk[index].y + num7 * num11, this.tmp_drunk[index].z + num8 * num11);
+                            if (!this.CheckCollision(this.tmp_poses, pt, minDist))
                             {
-                                MUniverseGen.tmp_drunk[index] = pt;
-                                MUniverseGen.tmp_poses.Add(pt);
-                                if (MUniverseGen.tmp_poses.Count >= maxCount)
+                                this.tmp_drunk[index] = pt;
+                                this.tmp_poses.Add(pt);
+                                if (this.tmp_poses.Count >= maxCount)
                                     return;
                                 break;
                             }
@@ -220,7 +228,7 @@ public static class MUniverseGen
         }
     }
 
-    private static bool CheckCollision(List<VectorLF3> pts, VectorLF3 pt, double min_dist)
+    private bool CheckCollision(List<VectorLF3> pts, VectorLF3 pt, double min_dist)
     {
         double num1 = min_dist * min_dist;
         foreach (VectorLF3 pt1 in pts)
@@ -234,7 +242,7 @@ public static class MUniverseGen
         return false;
     }
 
-    //public static void CreateGalaxyStarGraph(GalaxyData galaxy)
+    //public void CreateGalaxyStarGraph(GalaxyData galaxy)
     //{
     //    galaxy.graphNodes = new StarGraphNode[galaxy.starCount];
     //    for (int index1 = 0; index1 < galaxy.starCount; ++index1)
@@ -254,7 +262,7 @@ public static class MUniverseGen
     //    }
     //}
 
-    //private static void list_sorted_add(List<StarGraphNode> l, StarGraphNode n)
+    //private void list_sorted_add(List<StarGraphNode> l, StarGraphNode n)
     //{
     //    int count = l.Count;
     //    bool flag = false;
@@ -277,7 +285,7 @@ public static class MUniverseGen
     //    l.Add(n);
     //}
 
-    //private static void line_arragement_for_add_node(StarGraphNode node)
+    //private void line_arragement_for_add_node(StarGraphNode node)
     //{
     //    if (MUniverseGen.tmp_state == null)
     //        MUniverseGen.tmp_state = new int[128];

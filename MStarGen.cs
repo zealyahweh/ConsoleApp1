@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-public static class StarGen
+public class StarGen
 {
-    public static float[] orbitRadius = new float[17]
+    public float[] orbitRadius = new float[17]
     {
     0.0f,
     0.4f,
@@ -23,12 +23,12 @@ public static class StarGen
     15.4f,
     17.5f
     };
-    public static float specifyBirthStarMass = 0.0f;
-    public static float specifyBirthStarAge = 0.0f;
-    private static double[] pGas = new double[10];
+    public float specifyBirthStarMass = 0.0f;
+    public float specifyBirthStarAge = 0.0f;
+    private double[] pGas = new double[10];
     private const double PI = 3.14159265358979;
 
-    public static StarData CreateStar(
+    public StarData CreateStar(
       GalaxyData galaxy,
       VectorLF3 pos,
       int id,
@@ -70,7 +70,7 @@ public static class StarGen
             averageValue = y <= -0.08 ? 1.6f : -1.5f;
             standardDeviation = 0.3f;
         }
-        float num7 = StarGen.RandNormal(averageValue, standardDeviation, r1, r2);
+        float num7 = this.RandNormal(averageValue, standardDeviation, r1, r2);
         switch (needSpectr)
         {
             case ESpectrType.M:
@@ -152,7 +152,7 @@ public static class StarGen
         starData.orbitScaler = Mathf.Pow(1.35f, p2);
         if ((double)starData.orbitScaler < 1.0)
             starData.orbitScaler = Mathf.Lerp(starData.orbitScaler, 1f, 0.6f);
-        StarGen.SetStarAge(starData, starData.age, rn, rt);
+        this.SetStarAge(starData, starData.age, rn, rt);
         starData.dysonRadius = starData.orbitScaler * 0.28f;
         if ((double)starData.dysonRadius * 40000.0 < (double)starData.physicsRadius * 1.5)
             starData.dysonRadius = (float)((double)starData.physicsRadius * 1.5 / 40000.0);
@@ -162,7 +162,7 @@ public static class StarGen
         return starData;
     }
 
-    public static StarData CreateBirthStar(GalaxyData galaxy, int seed)
+    public StarData CreateBirthStar(GalaxyData galaxy, int seed)
     {
         StarData starData = new StarData();
         starData.galaxy = galaxy;
@@ -185,17 +185,17 @@ public static class StarGen
         double rt = random2.NextDouble();
         double num2 = random2.NextDouble() * 0.2 + 0.9;
         double num3 = Math.Pow(2.0, random2.NextDouble() * 0.4 - 0.2);
-        float p1 = Mathf.Clamp(StarGen.RandNormal(0.0f, 0.08f, r1, r2), -0.2f, 0.2f);
+        float p1 = Mathf.Clamp(this.RandNormal(0.0f, 0.08f, r1, r2), -0.2f, 0.2f);
         starData.mass = Mathf.Pow(2f, p1);
-        if ((double)StarGen.specifyBirthStarMass > 0.100000001490116)
-            starData.mass = StarGen.specifyBirthStarMass;
-        if ((double)StarGen.specifyBirthStarAge > 9.99999974737875E-06)
-            starData.age = StarGen.specifyBirthStarAge;
+        if ((double)this.specifyBirthStarMass > 0.100000001490116)
+            starData.mass = this.specifyBirthStarMass;
+        if ((double)this.specifyBirthStarAge > 9.99999974737875E-06)
+            starData.age = this.specifyBirthStarAge;
         double d = 2.0 + 0.4 * (1.0 - (double)starData.mass);
         starData.lifetime = (float)(10000.0 * Math.Pow(0.1, Math.Log10((double)starData.mass * 0.5) / Math.Log10(d) + 1.0) * num2);
         starData.age = (float)(num1 * 0.4 + 0.3);
-        if ((double)StarGen.specifyBirthStarAge > 9.99999974737875E-06)
-            starData.age = StarGen.specifyBirthStarAge;
+        if ((double)this.specifyBirthStarAge > 9.99999974737875E-06)
+            starData.age = this.specifyBirthStarAge;
         float f = (float)(1.0 - (double)Mathf.Pow(Mathf.Clamp01(starData.age), 20f) * 0.5) * starData.mass;
         starData.temperature = (float)(Math.Pow((double)f, 0.56 + 0.14 / (Math.Log10((double)f + 4.0) / Math.Log10(5.0))) * 4450.0 + 1300.0);
         double num4 = Math.Log10(((double)starData.temperature - 1300.0) / 4500.0) / Math.Log10(2.6) - 0.5;
@@ -217,7 +217,7 @@ public static class StarGen
         starData.orbitScaler = Mathf.Pow(1.35f, p2);
         if ((double)starData.orbitScaler < 1.0)
             starData.orbitScaler = Mathf.Lerp(starData.orbitScaler, 1f, 0.6f);
-        StarGen.SetStarAge(starData, starData.age, rn, rt);
+        this.SetStarAge(starData, starData.age, rn, rt);
         starData.dysonRadius = starData.orbitScaler * 0.28f;
         if ((double)starData.dysonRadius * 40000.0 < (double)starData.physicsRadius * 1.5)
             starData.dysonRadius = (float)((double)starData.physicsRadius * 1.5 / 40000.0);
@@ -227,14 +227,15 @@ public static class StarGen
         return starData;
     }
 
-    private static double _signpow(double x, double pow)
+    private double _signpow(double x, double pow)
     {
         double num = x <= 0.0 ? -1.0 : 1.0;
         return Math.Abs(Math.Pow(x, pow)) * num;
     }
 
-    public static void CreateStarPlanets(GalaxyData galaxy, StarData star, GameDesc gameDesc)
+    public void CreateStarPlanets(GalaxyData galaxy, StarData star, GameDesc gameDesc)
     {
+        MPlanetGen MPlanetGen = new MPlanetGen();
         Random random1 = new Random(star.seed);
         random1.Next();
         random1.Next();
@@ -374,27 +375,27 @@ public static class StarGen
         }
         else
         {
-            Array.Clear((Array)StarGen.pGas, 0, StarGen.pGas.Length);
+            Array.Clear((Array)this.pGas, 0, this.pGas.Length);
             if (star.index == 0)
             {
                 star.planetCount = 4;
-                StarGen.pGas[0] = 0.0;
-                StarGen.pGas[1] = 0.0;
-                StarGen.pGas[2] = 0.0;
+                this.pGas[0] = 0.0;
+                this.pGas[1] = 0.0;
+                this.pGas[2] = 0.0;
             }
             else if (star.spectr == ESpectrType.M)
             {
                 star.planetCount = num1 >= 0.1 ? (num1 >= 0.3 ? (num1 >= 0.8 ? 4 : 3) : 2) : 1;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.2;
-                    StarGen.pGas[1] = 0.2;
+                    this.pGas[0] = 0.2;
+                    this.pGas[1] = 0.2;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.0;
-                    StarGen.pGas[1] = 0.2;
-                    StarGen.pGas[2] = 0.3;
+                    this.pGas[0] = 0.0;
+                    this.pGas[1] = 0.2;
+                    this.pGas[2] = 0.3;
                 }
             }
             else if (star.spectr == ESpectrType.K)
@@ -402,15 +403,15 @@ public static class StarGen
                 star.planetCount = num1 >= 0.1 ? (num1 >= 0.2 ? (num1 >= 0.7 ? (num1 >= 0.95 ? 5 : 4) : 3) : 2) : 1;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.18;
-                    StarGen.pGas[1] = 0.18;
+                    this.pGas[0] = 0.18;
+                    this.pGas[1] = 0.18;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.0;
-                    StarGen.pGas[1] = 0.18;
-                    StarGen.pGas[2] = 0.28;
-                    StarGen.pGas[3] = 0.28;
+                    this.pGas[0] = 0.0;
+                    this.pGas[1] = 0.18;
+                    this.pGas[2] = 0.28;
+                    this.pGas[3] = 0.28;
                 }
             }
             else if (star.spectr == ESpectrType.G)
@@ -418,15 +419,15 @@ public static class StarGen
                 star.planetCount = num1 >= 0.4 ? (num1 >= 0.9 ? 5 : 4) : 3;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.18;
-                    StarGen.pGas[1] = 0.18;
+                    this.pGas[0] = 0.18;
+                    this.pGas[1] = 0.18;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.0;
-                    StarGen.pGas[1] = 0.2;
-                    StarGen.pGas[2] = 0.3;
-                    StarGen.pGas[3] = 0.3;
+                    this.pGas[0] = 0.0;
+                    this.pGas[1] = 0.2;
+                    this.pGas[2] = 0.3;
+                    this.pGas[3] = 0.3;
                 }
             }
             else if (star.spectr == ESpectrType.F)
@@ -434,15 +435,15 @@ public static class StarGen
                 star.planetCount = num1 >= 0.35 ? (num1 >= 0.8 ? 5 : 4) : 3;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.2;
-                    StarGen.pGas[1] = 0.2;
+                    this.pGas[0] = 0.2;
+                    this.pGas[1] = 0.2;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.0;
-                    StarGen.pGas[1] = 0.22;
-                    StarGen.pGas[2] = 0.31;
-                    StarGen.pGas[3] = 0.31;
+                    this.pGas[0] = 0.0;
+                    this.pGas[1] = 0.22;
+                    this.pGas[2] = 0.31;
+                    this.pGas[3] = 0.31;
                 }
             }
             else if (star.spectr == ESpectrType.A)
@@ -450,15 +451,15 @@ public static class StarGen
                 star.planetCount = num1 >= 0.3 ? (num1 >= 0.75 ? 5 : 4) : 3;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.2;
-                    StarGen.pGas[1] = 0.2;
+                    this.pGas[0] = 0.2;
+                    this.pGas[1] = 0.2;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.1;
-                    StarGen.pGas[1] = 0.28;
-                    StarGen.pGas[2] = 0.3;
-                    StarGen.pGas[3] = 0.35;
+                    this.pGas[0] = 0.1;
+                    this.pGas[1] = 0.28;
+                    this.pGas[2] = 0.3;
+                    this.pGas[3] = 0.35;
                 }
             }
             else if (star.spectr == ESpectrType.B)
@@ -466,27 +467,27 @@ public static class StarGen
                 star.planetCount = num1 >= 0.3 ? (num1 >= 0.75 ? 6 : 5) : 4;
                 if (star.planetCount <= 3)
                 {
-                    StarGen.pGas[0] = 0.2;
-                    StarGen.pGas[1] = 0.2;
+                    this.pGas[0] = 0.2;
+                    this.pGas[1] = 0.2;
                 }
                 else
                 {
-                    StarGen.pGas[0] = 0.1;
-                    StarGen.pGas[1] = 0.22;
-                    StarGen.pGas[2] = 0.28;
-                    StarGen.pGas[3] = 0.35;
-                    StarGen.pGas[4] = 0.35;
+                    this.pGas[0] = 0.1;
+                    this.pGas[1] = 0.22;
+                    this.pGas[2] = 0.28;
+                    this.pGas[3] = 0.35;
+                    this.pGas[4] = 0.35;
                 }
             }
             else if (star.spectr == ESpectrType.O)
             {
                 star.planetCount = num1 >= 0.5 ? 6 : 5;
-                StarGen.pGas[0] = 0.1;
-                StarGen.pGas[1] = 0.2;
-                StarGen.pGas[2] = 0.25;
-                StarGen.pGas[3] = 0.3;
-                StarGen.pGas[4] = 0.32;
-                StarGen.pGas[5] = 0.35;
+                this.pGas[0] = 0.1;
+                this.pGas[1] = 0.2;
+                this.pGas[2] = 0.25;
+                this.pGas[3] = 0.3;
+                this.pGas[4] = 0.32;
+                this.pGas[5] = 0.35;
             }
             else
                 star.planetCount = 1;
@@ -505,7 +506,7 @@ public static class StarGen
                 if (orbitAround == 0)
                 {
                     ++num8;
-                    if (index < star.planetCount - 1 && num11 < StarGen.pGas[index])
+                    if (index < star.planetCount - 1 && num11 < this.pGas[index])
                     {
                         gasGiant = true;
                         if (num10 < 3)
@@ -584,13 +585,13 @@ public static class StarGen
         star.asterBelt1OrbitIndex = (float)index1;
         star.asterBelt2OrbitIndex = (float)index3;
         if (index1 > 0)
-            star.asterBelt1Radius = StarGen.orbitRadius[index1] * (float)num6 * star.orbitScaler;
+            star.asterBelt1Radius = this.orbitRadius[index1] * (float)num6 * star.orbitScaler;
         if (index3 <= 0)
             return;
-        star.asterBelt2Radius = StarGen.orbitRadius[index3] * (float)num7 * star.orbitScaler;
+        star.asterBelt2Radius = this.orbitRadius[index3] * (float)num7 * star.orbitScaler;
     }
 
-    public static void SetStarAge(StarData star, float age, double rn, double rt)
+    public void SetStarAge(StarData star, float age, double rn, double rt)
     {
         float num1 = (float)(rn * 0.1 + 0.95);
         float num2 = (float)(rt * 0.4 + 0.8);
@@ -656,7 +657,7 @@ public static class StarGen
         }
     }
 
-    private static float RandNormal(
+    private float RandNormal(
       float averageValue,
       float standardDeviation,
       double r1,

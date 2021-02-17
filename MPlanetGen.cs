@@ -2,13 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class MPlanetGen
+public class MPlanetGen
 {
+    public float[] orbitRadius = new float[17]
+{
+    0.0f,
+    0.4f,
+    0.7f,
+    1f,
+    1.4f,
+    1.9f,
+    2.5f,
+    3.3f,
+    4.3f,
+    5.5f,
+    6.9f,
+    8.4f,
+    10f,
+    11.7f,
+    13.5f,
+    15.4f,
+    17.5f
+};
     public const double GRAVITY = 1.35385519905204E-06;
     public const double PI = 3.14159265358979;
-    private static List<int> tmp_theme;
+    private List<int> tmp_theme;
 
-    public static PlanetData CreatePlanet(
+    public PlanetData CreatePlanet(
       GalaxyData galaxy,
       StarData star,
       GameDesc gameDesc,
@@ -76,7 +96,7 @@ public static class MPlanetGen
         float f1;
         if (orbitAround == 0)
         {
-            float b = StarGen.orbitRadius[orbitIndex] * star.orbitScaler;
+            float b = orbitRadius[orbitIndex] * star.orbitScaler;
             float num16 = (float)(((double)a - 1.0) / (double)Mathf.Max(1f, b) + 1.0);
             f1 = b * num16;
         }
@@ -227,12 +247,12 @@ public static class MPlanetGen
             planet.luminosity = Mathf.Log(planet.luminosity) + 1f;
         }
         planet.luminosity = Mathf.Round(planet.luminosity * 100f) / 100f;
-        MPlanetGen.SetPlanetTheme(planet, star, gameDesc, 0, 0, rand1, rand2, rand3, rand4, theme_seed);
+        this.SetPlanetTheme(planet, star, gameDesc, 0, 0, rand1, rand2, rand3, rand4, theme_seed);
         //star.galaxy.astroPoses[planet.id].uRadius = planet.realRadius;
         return planet;
     }
 
-    public static void SetPlanetTheme(
+    public void SetPlanetTheme(
       PlanetData planet,
       StarData star,
       GameDesc game_desc,
@@ -250,10 +270,10 @@ public static class MPlanetGen
         }
         else
         {
-            if (MPlanetGen.tmp_theme == null)
-                MPlanetGen.tmp_theme = new List<int>();
+            if (this.tmp_theme == null)
+                this.tmp_theme = new List<int>();
             else
-                MPlanetGen.tmp_theme.Clear();
+                this.tmp_theme.Clear();
             int[] themeIds = game_desc.themeIds;
             int length = themeIds.Length;
             for (int index1 = 0; index1 < length; ++index1)
@@ -288,9 +308,9 @@ public static class MPlanetGen
                     }
                 }
                 if (flag)
-                    MPlanetGen.tmp_theme.Add(themeProto.ID);
+                    this.tmp_theme.Add(themeProto.ID);
             }
-            if (MPlanetGen.tmp_theme.Count == 0)
+            if (this.tmp_theme.Count == 0)
             {
                 for (int index1 = 0; index1 < length; ++index1)
                 {
@@ -311,20 +331,20 @@ public static class MPlanetGen
                         }
                     }
                     if (flag)
-                        MPlanetGen.tmp_theme.Add(themeProto.ID);
+                        this.tmp_theme.Add(themeProto.ID);
                 }
             }
-            if (MPlanetGen.tmp_theme.Count == 0)
+            if (this.tmp_theme.Count == 0)
             {
                 for (int index = 0; index < length; ++index)
                 {
                     ThemeProtoSet themes1 = ThemeWorks.GetThemes();
                     var themeProto = themes1.dataArray[index];
                     if (themeProto.PlanetType == EPlanetType.Desert)
-                        MPlanetGen.tmp_theme.Add(themeProto.ID);
+                        this.tmp_theme.Add(themeProto.ID);
                 }
             }
-            planet.theme = MPlanetGen.tmp_theme[(int)(rand1 * (double)MPlanetGen.tmp_theme.Count) % MPlanetGen.tmp_theme.Count];
+            planet.theme = this.tmp_theme[(int)(rand1 * (double)this.tmp_theme.Count) % this.tmp_theme.Count];
         }
 
         ThemeProtoSet themes = ThemeWorks.GetThemes();
